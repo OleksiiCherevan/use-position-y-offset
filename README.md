@@ -1,6 +1,18 @@
 <h1>usePositionYOffset</h1>
-
 React Hook that triggers on window scroll and return Y offset
+
+<br/>
+<br/>
+
+```
+npm install use-position-y-offset 
+```
+
+or 
+
+```
+yarn add use-position-y-offset 
+```
 <br/>
 <br/>
 <b>Example</b>
@@ -25,6 +37,16 @@ debounceTime - number (default 200ms)
 ```
 ...
 const postitionYOffset = usePositionYOffset({debounceTime:200})
+```
+callback - function (default undefined)
+
+```
+...
+const handlePositionChange = (positionYOffset) => {
+    console.log(positionYOffset);
+}
+
+usePositionYOffset({function: handlePositionChange})
 ```
 
 ## Word from author
