@@ -11,10 +11,10 @@ In your React component:
 ```
 import usePositionYOffset from "position-y-offset"
 
-function SizeInfo() {
+function PositionInfo() {
   const postitionYOffset = usePositionYOffset()
 
-  return <div>size = ({ postitionYOffset })</div>
+  return <div>position = ({ postitionYOffset })</div>
 }
 ```
 
