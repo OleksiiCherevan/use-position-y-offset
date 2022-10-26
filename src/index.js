@@ -1,17 +1,48 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { useState, useEffect } from "react";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const DEBOUNCE_TIME = 200;
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function debounce(callback, waitTime) {
+  let timeNow = Date.now();
+  return () => {
+    if (timeNow - Date.now() + waitTime < 0) {
+      callback();
+      timeNow = Date.now();
+    }
+  };
+}
+
+const getPageYOffsetPosition = () => {
+  return {
+    position: window.pageYOffset,
+  };
+};
+
+function useWindowYPositionChange({
+  callback: onScroll,
+  debounceTime = DEBOUNCE_TIME,
+}) {
+  const [scrollPosition, setScrollPosition] = useState({ position: 0 });
+
+  const handleSetPosition = () => setScrollPosition(getPageYOffsetPosition());
+
+  useEffect(() => {
+    handleSetPosition();
+    const handler = debounce(handleSetPosition, debounceTime);
+
+    window.addEventListener("scroll", handler);
+    return () => {
+      window.removeEventListener("scroll", handler);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof onScroll == "function") {
+      onScroll(scrollPosition);
+    }
+  }, [scrollPosition]);
+
+  return scrollPosition;
+}
+
+export default useWindowYPositionChange;
