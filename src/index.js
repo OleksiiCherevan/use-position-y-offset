@@ -11,38 +11,34 @@ function debounce(callback, waitTime) {
     }
   };
 }
-
 const getPageYOffsetPosition = () => {
   return {
     position: window.pageYOffset,
   };
 };
-
-function useWindowYPositionChange({
-  callback: onScroll,
-  debounceTime = DEBOUNCE_TIME,
-}) {
-  const [scrollPosition, setScrollPosition] = useState({ position: 0 });
-
+function useWindowYPositionChange(
+  { callback: onScroll, debounceTime } = {
+    callback: null,
+    debounceTime: DEBOUNCE_TIME,
+  }
+) {
+  const [scrollPosition, setScrollPosition] = useState({
+    position: 0,
+  });
   const handleSetPosition = () => setScrollPosition(getPageYOffsetPosition());
-
   useEffect(() => {
     handleSetPosition();
     const handler = debounce(handleSetPosition, debounceTime);
-
     window.addEventListener("scroll", handler);
     return () => {
       window.removeEventListener("scroll", handler);
     };
   }, []);
-
   useEffect(() => {
-    if (typeof onScroll == "function") {
+    if (typeof onScroll === "function") {
       onScroll(scrollPosition);
     }
   }, [scrollPosition]);
-
   return scrollPosition;
 }
-
 export default useWindowYPositionChange;
